@@ -1,0 +1,89 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.8'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'idea'
+    id "org.flywaydb.flyway" version "9.4.0"
+}
+
+group = 'br.com.exercito'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // DevTools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Mail
+    implementation 'javax.mail:javax.mail-api:1.6.2'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+
+    //Webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // SpringDoc
+    /*implementation group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.6.3'
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.8'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.3'
+    implementation 'org.springdoc:springdoc-openapi-webflux-core:1.6.3'*/
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/arquivo'
+    user = 'postgres'
+    password = '123456'
+    driver = 'org.postgresql.Driver'
+    cleanDisabled = false
+}
+
+build.dependsOn(flywayMigrate)
