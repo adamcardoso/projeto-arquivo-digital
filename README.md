@@ -39,17 +39,17 @@ Acessando o Actuator
 
 O Actuator está configurado para fornecer informações e métricas sobre a aplicação. Você pode acessá-lo usando as seguintes URLs:
 
-    Informações gerais: http://localhost:8081/actuator
-    Status da aplicação: http://localhost:8081/actuator/health
-    Informações detalhadas de endpoints: http://localhost:8081/actuator/info
-    Métricas da aplicação: http://localhost:8081/actuator/metrics
+    Informações gerais: http://localhost:8082/actuator
+    Status da aplicação: http://localhost:8082/actuator/health
+    Informações detalhadas de endpoints: http://localhost:8082/actuator/info
+    Métricas da aplicação: http://localhost:8082/actuator/metrics
 
 Acessando a Documentação Swagger
 
 A aplicação fornece documentação Swagger para as APIs. Para acessá-la, siga estas etapas:
 
     Inicie a aplicação.
-    Abra seu navegador da web e navegue até http://localhost:8080/swagger-ui/index.html#/.
+    Abra seu navegador da web e navegue até http://localhost:8081/swagger-ui/index.html#/.
 
 Contribuindo
 
