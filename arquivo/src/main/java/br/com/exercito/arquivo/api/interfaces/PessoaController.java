@@ -4,7 +4,6 @@ import br.com.exercito.arquivo.dto.PessoaDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,20 +20,16 @@ public interface PessoaController {
     ResponseEntity<Page<PessoaDTO>> findAll(Pageable pageable);
 
     @Operation(description = "Buscar pessoa por ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    })
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @ApiResponse(responseCode = "404", description = "Pessoa não encontrada")
+    @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     @GetMapping("/persons/{id}")
     ResponseEntity<PessoaDTO> findById(@Parameter(description = "ID da pessoa") @PathVariable("id") Long id);
 
     @Operation(description = "Buscar pessoas por nome")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pessoas não encontradas"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    })
+    @ApiResponse(responseCode = "200", description = "Sucesso")
+    @ApiResponse(responseCode = "404", description = "Pessoas não encontradas")
+    @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     @GetMapping("/persons/search")
     ResponseEntity<List<PessoaDTO>> findByName(@Parameter(description = "Nome da pessoa") String name);
 
