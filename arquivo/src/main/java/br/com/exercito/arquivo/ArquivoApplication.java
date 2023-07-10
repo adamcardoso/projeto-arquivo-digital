@@ -1,7 +1,7 @@
 package br.com.exercito.arquivo;
 
-import br.com.exercito.arquivo.entities.Pessoa;
-import br.com.exercito.arquivo.repositories.PessoaRepository;
+import br.com.exercito.arquivo.domain.entities.Pessoa;
+import br.com.exercito.arquivo.infra.repositories.PessoaRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

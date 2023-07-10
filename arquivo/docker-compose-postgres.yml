@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
+      - keycloak-postgres-data:/data/postgres
     ports:
       - "5432:5432"
     networks:
@@ -25,7 +25,6 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
-
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
@@ -37,5 +36,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres:
+  keycloak-postgres-data:
   pgadmin:
