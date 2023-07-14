@@ -3,7 +3,7 @@ package br.com.exercito.arquivo.app.api.impl;
 import br.com.exercito.arquivo.app.api.interfaces.PessoaController;
 import br.com.exercito.arquivo.app.dto.PessoaDTO;
 import br.com.exercito.arquivo.domain.exceptions.ResourceNotFoundException;
-import br.com.exercito.arquivo.domain.services.impl.PessoaServiceImpl;
+import br.com.exercito.arquivo.domain.services.interfaces.PessoaService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
@@ -24,20 +24,21 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 @SecurityScheme(name = "Bearer Authentication", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class PessoaControllerImpl implements PessoaController {
 
     private static final Logger logger = LoggerFactory.getLogger(PessoaControllerImpl.class);
-    private final PessoaServiceImpl pessoaServiceImpl;
+    private final PessoaService pessoaService;
 
-    public PessoaControllerImpl(PessoaServiceImpl pessoaServiceImpl) {
-        this.pessoaServiceImpl = pessoaServiceImpl;
+    public PessoaControllerImpl(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
     }
 
     @PreAuthorize("hasRole('client_admin')")
     @GetMapping("/persons")
     public ResponseEntity<Page<PessoaDTO>> findAll(Pageable pageable) {
-        Page<PessoaDTO> page = pessoaServiceImpl.findAll(pageable);
+        Page<PessoaDTO> page = pessoaService.findAll(pageable);
 
         logger.info("Listando todas as pessoas");
 
@@ -47,7 +48,7 @@ public class PessoaControllerImpl implements PessoaController {
     @PreAuthorize("hasRole('client_admin')")
     @GetMapping("/persons/{id}")
     public ResponseEntity<PessoaDTO> findById(@PathVariable("id") Long id) {
-        Optional<PessoaDTO> personDTO = pessoaServiceImpl.findById(id);
+        Optional<PessoaDTO> personDTO = pessoaService.findById(id);
         if (personDTO.isPresent()) {
             logger.info("Encontrada pessoa com ID: {}", id);
             return ResponseEntity.ok(personDTO.get());
@@ -61,7 +62,7 @@ public class PessoaControllerImpl implements PessoaController {
     @GetMapping("/persons/search")
     public ResponseEntity<List<PessoaDTO>> findByName(@RequestParam("nomeCadastrado") String nomeCadastrado) {
         try {
-            List<PessoaDTO> personDTOs = pessoaServiceImpl.findByName(nomeCadastrado);
+            List<PessoaDTO> personDTOs = pessoaService.findByName(nomeCadastrado);
 
             logger.info("Listando as pessoas por nome");
 
@@ -75,7 +76,7 @@ public class PessoaControllerImpl implements PessoaController {
     @PreAuthorize("hasRole('client_admin')")
     @PostMapping("/persons")
     public ResponseEntity<PessoaDTO> insert(@Valid @RequestBody PessoaDTO dto) {
-        dto = pessoaServiceImpl.insert(dto);
+        dto = pessoaService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.id()).toUri();
 
@@ -86,7 +87,7 @@ public class PessoaControllerImpl implements PessoaController {
     @PreAuthorize("hasRole('client_admin')")
     @PutMapping("/persons/{id}")
     public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @Valid @RequestBody PessoaDTO dto) {
-        dto = pessoaServiceImpl.update(id, dto);
+        dto = pessoaService.update(id, dto);
 
         logger.info("Atualizando uma pessoa com ID: {}", id);
         return ResponseEntity.ok().body(dto);
@@ -95,7 +96,7 @@ public class PessoaControllerImpl implements PessoaController {
     @PreAuthorize("hasRole('client_admin')")
     @DeleteMapping("/persons/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        pessoaServiceImpl.delete(id);
+        pessoaService.delete(id);
 
         logger.info("Deletando uma pessoa com ID: {}", id);
 

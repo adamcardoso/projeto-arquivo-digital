@@ -1,7 +1,7 @@
 package br.com.exercito.arquivo.app.api.impl;
 
 import br.com.exercito.arquivo.app.api.interfaces.SolicitacaoDeProcessoController;
-import br.com.exercito.arquivo.domain.services.impl.SolicitacaoDeProcessoServiceImpl;
+import br.com.exercito.arquivo.domain.services.interfaces.SolicitacaoDeProcessoService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.slf4j.Logger;
@@ -23,9 +23,9 @@ public class SolicitacaoDeProcessoControllerImpl implements SolicitacaoDeProcess
 
     private static final Logger logger = LoggerFactory.getLogger(SolicitacaoDeProcessoControllerImpl.class);
 
-    private final SolicitacaoDeProcessoServiceImpl solicitacaoDeProcessoService;
+    private final SolicitacaoDeProcessoService solicitacaoDeProcessoService;
 
-    public SolicitacaoDeProcessoControllerImpl(SolicitacaoDeProcessoServiceImpl solicitacaoDeProcessoService) {
+    public SolicitacaoDeProcessoControllerImpl(SolicitacaoDeProcessoService solicitacaoDeProcessoService) {
         this.solicitacaoDeProcessoService = solicitacaoDeProcessoService;
     }
 
