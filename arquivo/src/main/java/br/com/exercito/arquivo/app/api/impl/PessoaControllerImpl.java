@@ -22,10 +22,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:8081"})
+@SecurityScheme(name = "Bearer Authentication", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
-@SecurityScheme(name = "Bearer Authentication", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class PessoaControllerImpl implements PessoaController {
 
     private static final Logger logger = LoggerFactory.getLogger(PessoaControllerImpl.class);
