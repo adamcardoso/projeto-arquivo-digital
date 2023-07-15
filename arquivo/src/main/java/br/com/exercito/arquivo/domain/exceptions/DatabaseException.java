@@ -1,9 +1,13 @@
 package br.com.exercito.arquivo.domain.exceptions;
 
+import java.io.Serial;
+
 public class DatabaseException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    public DatabaseException(String msg) {
-        super(msg);
+
+    public DatabaseException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

@@ -6,12 +6,9 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.mail.MessagingException;
 
 
 @CrossOrigin(origins = {"http://localhost:3000/", "http://localhost:8081"})
@@ -32,13 +29,10 @@ public class SolicitacaoDeProcessoControllerImpl implements SolicitacaoDeProcess
     @PreAuthorize("hasRole('client_user')")
     @PostMapping("/solicitar-processo")
     public ResponseEntity<String> solicitarProcesso(@RequestBody String processo) {
-        try {
-            solicitacaoDeProcessoService.solicitarProcesso(processo);
-            logger.info("Solicitação de processo enviada com sucesso!");
-            return ResponseEntity.ok("Solicitação de processo enviada com sucesso!");
-        } catch (MessagingException e) {
-            logger.error("Erro ao enviar a solicitação de processo.", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar a solicitação de processo.");
-        }
+        solicitacaoDeProcessoService.solicitarProcesso(processo);
+
+        logger.info("Solicitação de processo enviada com sucesso!");
+
+        return ResponseEntity.ok("Solicitação de processo enviada com sucesso!");
     }
 }

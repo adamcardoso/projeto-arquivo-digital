@@ -14,7 +14,12 @@ public class SolicitacaoDeProcessoServiceImpl implements SolicitacaoDeProcessoSe
         this.emailServiceImpl = emailService;
     }
 
-    public void solicitarProcesso(String processo) throws MessagingException {
-        emailServiceImpl.sendEmail("arquivodigitalsvp3@outlook.com", "Solicitação de Processo", "Por favor, separe o processo " + processo + ".");
+    public void solicitarProcesso(String processo) {
+        try {
+            emailServiceImpl.sendEmail("arquivodigitalsvp3@outlook.com", "Solicitação de Processo", "Por favor, separe o processo " + processo + ".");
+        } catch (MessagingException e) {
+            // Tratar a exceção aqui (pode ser lançada novamente, logada, etc.)
+            e.printStackTrace();
+        }
     }
 }

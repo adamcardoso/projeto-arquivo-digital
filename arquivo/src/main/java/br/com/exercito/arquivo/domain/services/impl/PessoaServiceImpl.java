@@ -27,34 +27,50 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Transactional(readOnly = true)
     public Page<PessoaDTO> findAll(Pageable pageable) {
-        Page<Pessoa> persons = pessoaRepository.findAll(pageable);
-        return persons.map(PessoaDTO::new);
+        try {
+            Page<Pessoa> persons = pessoaRepository.findAll(pageable);
+            return persons.map(PessoaDTO::new);
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao buscar pessoas no banco de dados", e);
+        }
     }
 
     @Transactional
     public Optional<PessoaDTO> findById(Long id) {
-        Optional<Pessoa> obj = pessoaRepository.findById(id);
-        return obj.map(PessoaDTO::new);
+        try {
+            Optional<Pessoa> obj = pessoaRepository.findById(id);
+            return obj.map(PessoaDTO::new);
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao buscar pessoa por ID no banco de dados", e);
+        }
     }
 
     @Transactional(readOnly = true)
     public List<PessoaDTO> findByName(String nomeCadastrado) {
-        List<Pessoa> list = pessoaRepository.findByNomeCadastradoContainingIgnoreCase(nomeCadastrado);
+        try {
+            List<Pessoa> list = pessoaRepository.findByNomeCadastradoContainingIgnoreCase(nomeCadastrado);
 
-        if (list.isEmpty()) {
-            throw new ResourceNotFoundException("Nome não encontrado: " + nomeCadastrado);
+            if (list.isEmpty()) {
+                throw new ResourceNotFoundException("Nome não encontrado: " + nomeCadastrado);
+            }
+
+            return list.stream()
+                    .map(PessoaDTO::new)
+                    .toList();
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao buscar pessoas no banco de dados", e);
         }
-
-        return list.stream()
-                .map(PessoaDTO::new)
-                .toList();
     }
 
     public PessoaDTO insert(PessoaDTO dto) {
-        Pessoa entity = new Pessoa();
-        copyDtoToEntity(dto, entity);
-        entity = pessoaRepository.save(entity);
-        return new PessoaDTO(entity);
+        try {
+            Pessoa entity = new Pessoa();
+            copyDtoToEntity(dto, entity);
+            entity = pessoaRepository.save(entity);
+            return new PessoaDTO(entity);
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao inserir pessoa no banco de dados", e);
+        }
     }
 
     public PessoaDTO update(Long id, PessoaDTO dto) {
@@ -70,19 +86,20 @@ public class PessoaServiceImpl implements PessoaService {
             }
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException(ID_NOT_FOUND_MESSAGE + id);
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao atualizar pessoa no banco de dados", e);
         }
     }
-
 
     public void delete(Long id) {
         try {
             pessoaRepository.deleteById(id);
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(ID_NOT_FOUND_MESSAGE + id);
-        }
-        catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Integrity violation");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Violação de integridade no banco de dados", e);
+        } catch (Exception e) {
+            throw new DatabaseException("Erro ao excluir pessoa do banco de dados", e);
         }
     }
 

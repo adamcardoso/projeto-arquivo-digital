@@ -2,7 +2,6 @@ package br.com.exercito.arquivo.app.api.impl;
 
 import br.com.exercito.arquivo.app.api.interfaces.PessoaController;
 import br.com.exercito.arquivo.app.dto.PessoaDTO;
-import br.com.exercito.arquivo.domain.exceptions.ResourceNotFoundException;
 import br.com.exercito.arquivo.domain.services.interfaces.PessoaService;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -11,11 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -55,23 +52,18 @@ public class PessoaControllerImpl implements PessoaController {
             return ResponseEntity.ok(personDTO.get());
         } else {
             logger.error("Pessoa com ID {} não encontrada", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recurso não encontrado");
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAnyRole('client_user', 'client_admin')")
     @GetMapping("/persons/search")
     public ResponseEntity<List<PessoaDTO>> findByName(@RequestParam("nomeCadastrado") String nomeCadastrado) {
-        try {
-            List<PessoaDTO> personDTOs = pessoaService.findByName(nomeCadastrado);
+        List<PessoaDTO> personDTOs = pessoaService.findByName(nomeCadastrado);
 
-            logger.info("Listando as pessoas por nome");
+        logger.info("Listando as pessoas por nome");
 
-            return ResponseEntity.ok().body(personDTOs);
-        } catch (ResourceNotFoundException ex) {
-            logger.error("Nenhuma pessoa encontrada com o nome: {}", nomeCadastrado);
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(personDTOs);
     }
 
     @PreAuthorize("hasRole('client_admin')")
